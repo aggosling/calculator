@@ -26,6 +26,7 @@ body {
     margin-bottom: 20px;
     box-sizing: border-box;
     background-color: white;
+    overflow: hidden;
 }
 
 .buttons-container {
