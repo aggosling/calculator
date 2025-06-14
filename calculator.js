@@ -181,7 +181,7 @@ const keyPressed = document.querySelector("body");
 keyPressed.addEventListener('keydown', e => {
     console.log(e.key);
     if (/^[0-9]$/i.test(e.key))
-        return numberEvent(e);
+        numberEvent(e);
     else if (["+", "-", "=", "/", "*", "Enter"].indexOf(e.key) > -1)
         operatorEvent(e);
     else if (e.key === ".")
