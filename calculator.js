@@ -19,7 +19,7 @@ function multiply(a, b) {
 function divide(a, b) {
     if (b === "0") {
         clearVariables();
-        return "NO";
+        return "N08";
     }
     return Number(a) / Number(b);
 }
@@ -63,7 +63,9 @@ function clearAll() {
     clearVariables();
 }
 
-const displayText = document.querySelector(".display");
+function switchPlusMinus(numberStr) {
+    return numberStr[0] === "-" ? numberStr.substring(1) : "-" + numberStr;
+}
 
 function setDisplayText(text) {
     if (isDecimal(text))
@@ -71,6 +73,8 @@ function setDisplayText(text) {
     else
         displayText.innerText = text;
 }
+
+const displayText = document.querySelector(".display");
 
 const numberButtons = document.querySelectorAll(".button.number");
 numberButtons.forEach(button => button.addEventListener('click', function (e) {
@@ -152,6 +156,14 @@ plusMinusButton.addEventListener('click', () => {
     }
 });
 
-function switchPlusMinus(numberStr) {
-    return numberStr[0] === "-" ? numberStr.substring(1) : "-" + numberStr;
-}
+const decimalButton = document.querySelector(".button.decimal");
+decimalButton.addEventListener('click', () => {
+    if (num2 && !isDecimal(num2)) {
+        num2 += ".";
+        setDisplayText(num2);
+    }
+    else if (!isDecimal(num1)) {
+        num1 += ".";
+        setDisplayText(num1);
+    }
+});
