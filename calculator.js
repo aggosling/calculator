@@ -27,14 +27,24 @@ function divide(a, b) {
 function operate(a, operator, b) {
     switch (operator) {
         case "+":
-            return add(a, b);
+            return String(add(a, b));
         case "-":
-            return subtract(a, b);
+            return String(subtract(a, b));
         case "x":
-            return multiply(a, b);
+            return String(multiply(a, b));
         case "%":
-            return divide(a, b);
+            return String(divide(a, b));
     }
+}
+
+function isDecimal(numberStr) {
+    return numberStr.indexOf(".") > -1;
+}
+
+function roundDecimal(numberStr) {
+    if (numberStr.length > 7)
+        return Number(numberStr).toFixed(5);
+    return numberStr;
 }
 
 function clearDisplay() {
@@ -45,6 +55,7 @@ function clearVariables() {
     num2 = "";
     operator = "";
     num1 = "";
+    equals = false;
 }
 
 function clearAll() {
@@ -55,14 +66,17 @@ function clearAll() {
 const displayText = document.querySelector(".display");
 
 function setDisplayText(text) {
-    displayText.innerText = text;
+    if (isDecimal(text))
+        displayText.innerText = roundDecimal(text);
+    else
+        displayText.innerText = text;
 }
 
 const numberButtons = document.querySelectorAll(".button.number");
 numberButtons.forEach(button => button.addEventListener('click', function (e) {
     let numPressed = e.target.innerText;
     if (!operator) {
-        num1 = num1 + numPressed;
+        num1 += numPressed;
         setDisplayText(num1);
     }
     else if (equals) {
@@ -71,7 +85,7 @@ numberButtons.forEach(button => button.addEventListener('click', function (e) {
         setDisplayText(num1);
     }
     else {
-        num2 = num2 + numPressed;
+        num2 += numPressed;
         setDisplayText(num2);
     }
 }));
@@ -80,11 +94,25 @@ const operatorButtons = document.querySelectorAll(".button.operator");
 operatorButtons.forEach(button => button.addEventListener('click', e => {
     let op = e.target.innerText;
     if (op === "=") {
+        // If no operator and 2nd number to calculate, ignore equals button
+        if (!operator || !num2)
+            return;
         equals = true;
-        setDisplayText(operate(num1, operator, num2));
+        num1 = operate(num1, operator, num2);
+        setDisplayText(num1);
+        num2 = "";
     }
-    else
+    else if (operator && num2) {
+        equals = false;
+        num1 = operate(num1, operator, num2);
+        setDisplayText(num1);
+        num2 = "";
         operator = op;
+    }
+    else {
+        equals = false;
+        operator = op;
+    }
 }));
 
 const clearButton = document.querySelector(".button.clear");
@@ -111,3 +139,19 @@ backButton.addEventListener('click', () => {
         clearAll();
     setDisplayText(newNum || EMPTY_DISPLAY);
 });
+
+const plusMinusButton = document.querySelector(".button.plus-minus");
+plusMinusButton.addEventListener('click', () => {
+    if (num2) {
+        num2 = switchPlusMinus(num2);
+        setDisplayText(num2);
+    }
+    else {
+        num1 = switchPlusMinus(num1);
+        setDisplayText(num1);
+    }
+});
+
+function switchPlusMinus(numberStr) {
+    return numberStr[0] === "-" ? numberStr.substring(1) : "-" + numberStr;
+}
