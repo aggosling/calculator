@@ -30,9 +30,9 @@ function operate(a, operator, b) {
             return String(add(a, b));
         case "-":
             return String(subtract(a, b));
-        case "x":
+        case "*":
             return String(multiply(a, b));
-        case "%":
+        case "/":
             return String(divide(a, b));
     }
 }
@@ -75,8 +75,8 @@ function setDisplayText(text) {
 }
 
 function operatorEvent(e) {
-    let op = e.target.innerText;
-    if (op === "=") {
+    let op = e.key || e.target.innerText;
+    if (op === "=" || op === "Enter") {
         // If no operator and 2nd number to calculate, ignore equals button
         if (!operator || !num2)
             return;
@@ -99,7 +99,8 @@ function operatorEvent(e) {
 }
 
 function numberEvent(e) {
-    let numPressed = e.target.innerText;
+    let numPressed = e.key || e.target.innerText;
+    console.log(numPressed);
     if (!operator) {
         num1 += numPressed;
         setDisplayText(num1);
@@ -179,4 +180,14 @@ decimalButton.addEventListener('click', decimalEvent);
 const keyPressed = document.querySelector("body");
 keyPressed.addEventListener('keydown', e => {
     console.log(e.key);
+    if (/^[0-9]$/i.test(e.key))
+        return numberEvent(e);
+    else if (["+", "-", "=", "/", "*", "Enter"].indexOf(e.key) > -1)
+        operatorEvent(e);
+    else if (e.key === ".")
+        decimalEvent();
+    else if (e.key === "Backspace")
+        backEvent();
+    else if (e.key === "Escape")
+        clearAll();
 });
