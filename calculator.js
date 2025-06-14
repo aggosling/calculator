@@ -2,7 +2,7 @@ let num1 = "";
 let operator = "";
 let num2 = "";
 let equals = false;
-const EMPTY_DISPLAY = "0.0";
+const EMPTY_DISPLAY = "0";
 
 function add(a, b) {
     return Number(a) + Number(b);
