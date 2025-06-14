@@ -5,7 +5,7 @@ let equals = false;
 const EMPTY_DISPLAY = "0";
 
 function add(a, b) {
-    return Number(a) + Number(b);
+    return (Number(a) * 10 + Number(b) * 10) / 10;
 }
 
 function subtract(a, b) {
