@@ -19,7 +19,7 @@ function multiply(a, b) {
 function divide(a, b) {
     if (b === "0") {
         clearVariables();
-        return "N08";
+        return "N08H3D";
     }
     return Number(a) / Number(b);
 }
@@ -30,8 +30,10 @@ function operate(a, operator, b) {
             return String(add(a, b));
         case "-":
             return String(subtract(a, b));
+        case "x":
         case "*":
             return String(multiply(a, b));
+        case "÷":
         case "/":
             return String(divide(a, b));
     }
@@ -182,7 +184,7 @@ keyPressed.addEventListener('keydown', e => {
     console.log(e.key);
     if (/^[0-9]$/i.test(e.key))
         numberEvent(e);
-    else if (["+", "-", "=", "/", "*", "Enter"].indexOf(e.key) > -1)
+    else if (["+", "-", "=", "/", "*", "x", "Enter"].indexOf(e.key) > -1)
         operatorEvent(e);
     else if (e.key === ".")
         decimalEvent();
