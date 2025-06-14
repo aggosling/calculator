@@ -74,28 +74,7 @@ function setDisplayText(text) {
         displayText.innerText = text;
 }
 
-const displayText = document.querySelector(".display");
-
-const numberButtons = document.querySelectorAll(".button.number");
-numberButtons.forEach(button => button.addEventListener('click', function (e) {
-    let numPressed = e.target.innerText;
-    if (!operator) {
-        num1 += numPressed;
-        setDisplayText(num1);
-    }
-    else if (equals) {
-        clearVariables();
-        num1 = numPressed;
-        setDisplayText(num1);
-    }
-    else {
-        num2 += numPressed;
-        setDisplayText(num2);
-    }
-}));
-
-const operatorButtons = document.querySelectorAll(".button.operator");
-operatorButtons.forEach(button => button.addEventListener('click', e => {
+function operatorEvent(e) {
     let op = e.target.innerText;
     if (op === "=") {
         // If no operator and 2nd number to calculate, ignore equals button
@@ -117,13 +96,26 @@ operatorButtons.forEach(button => button.addEventListener('click', e => {
         equals = false;
         operator = op;
     }
-}));
+}
 
-const clearButton = document.querySelector(".button.clear");
-clearButton.addEventListener('click', () => clearAll());
+function numberEvent(e) {
+    let numPressed = e.target.innerText;
+    if (!operator) {
+        num1 += numPressed;
+        setDisplayText(num1);
+    }
+    else if (equals) {
+        clearVariables();
+        num1 = numPressed;
+        setDisplayText(num1);
+    }
+    else {
+        num2 += numPressed;
+        setDisplayText(num2);
+    }
+}
 
-const backButton = document.querySelector(".button.back");
-backButton.addEventListener('click', () => {
+function backEvent() {
     let newNum = "";
     if (equals) {
         equals = false;
@@ -142,7 +134,32 @@ backButton.addEventListener('click', () => {
     else
         clearAll();
     setDisplayText(newNum || EMPTY_DISPLAY);
-});
+}
+
+function decimalEvent() {
+    if (num2 && !isDecimal(num2)) {
+        num2 += ".";
+        setDisplayText(num2);
+    }
+    else if (!isDecimal(num1)) {
+        num1 += ".";
+        setDisplayText(num1);
+    }
+}
+
+const displayText = document.querySelector(".display");
+
+const numberButtons = document.querySelectorAll(".button.number");
+numberButtons.forEach(button => button.addEventListener('click', numberEvent));
+
+const operatorButtons = document.querySelectorAll(".button.operator");
+operatorButtons.forEach(button => button.addEventListener('click', operatorEvent));
+
+const clearButton = document.querySelector(".button.clear");
+clearButton.addEventListener('click', () => clearAll());
+
+const backButton = document.querySelector(".button.back");
+backButton.addEventListener('click', backEvent);
 
 const plusMinusButton = document.querySelector(".button.plus-minus");
 plusMinusButton.addEventListener('click', () => {
@@ -157,13 +174,9 @@ plusMinusButton.addEventListener('click', () => {
 });
 
 const decimalButton = document.querySelector(".button.decimal");
-decimalButton.addEventListener('click', () => {
-    if (num2 && !isDecimal(num2)) {
-        num2 += ".";
-        setDisplayText(num2);
-    }
-    else if (!isDecimal(num1)) {
-        num1 += ".";
-        setDisplayText(num1);
-    }
+decimalButton.addEventListener('click', decimalEvent);
+
+const keyPressed = document.querySelector("body");
+keyPressed.addEventListener('keydown', e => {
+    console.log(e.key);
 });
